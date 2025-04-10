@@ -1,47 +1,34 @@
-class EMA():
-    def __init__(self, model, decay):
+class EMA:
+    def __init__(self, model, decay=0.999):
+        # decay为半衰期
         self.model = model
         self.decay = decay
         self.shadow = {}
         self.backup = {}
 
-    def register(self):
-        for name, param in self.model.named_parameters():
+        # 初始化 shadow 参数（与模型参数同结构）
+        for name, param in model.named_parameters():
             if param.requires_grad:
                 self.shadow[name] = param.data.clone()
 
     def update(self):
+        """在每一步训练后调用以更新 EMA 参数"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
                 assert name in self.shadow
-                new_average = (1.0 - self.decay) * param.data + self.decay * self.shadow[name]
+                new_average = self.decay * self.shadow[name] + (1.0 - self.decay) * param.data
                 self.shadow[name] = new_average.clone()
 
     def apply_shadow(self):
+        """将模型参数替换为 EMA 参数（例如在验证时使用）"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
-                assert name in self.shadow
-                self.backup[name] = param.data
-                param.data = self.shadow[name]
+                self.backup[name] = param.data.clone()
+                param.data = self.shadow[name].clone()
 
     def restore(self):
+        """恢复原始模型参数（在验证后调用）"""
         for name, param in self.model.named_parameters():
             if param.requires_grad:
-                assert name in self.backup
-                param.data = self.backup[name]
+                param.data = self.backup[name].clone()
         self.backup = {}
-
-# 初始化
-ema = EMA(model, 0.999)
-ema.register()
-
-# 训练过程中，更新完参数后，同步update shadow weights
-def train():
-    optimizer.step()
-    ema.update()
-
-# eval前，apply shadow weights；eval之后，恢复原来模型的参数
-def evaluate():
-    ema.apply_shadow()
-    # evaluate
-    ema.restore()
