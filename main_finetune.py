@@ -215,6 +215,7 @@ def main(args):
         drop_last=False
     )
 
+    # Mixup和CutMix是两种数据增强技术，用于在训练过程中对输入图像进行混合，以提高模型的泛化能力。
     mixup_fn = None
     mixup_active = args.mixup > 0 or args.cutmix > 0. or args.cutmix_minmax is not None
     if mixup_active:

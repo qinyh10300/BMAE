@@ -1,5 +1,7 @@
 datasets/cifar10_dataset
 
+datasets/mini_imagenet
+
 ckpts/
 
 logs/
