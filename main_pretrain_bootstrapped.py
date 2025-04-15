@@ -100,7 +100,13 @@ def get_args_parser():
     parser.add_argument('--dist_on_itp', action='store_true')
     parser.add_argument('--dist_url', default='env://',
                         help='url used to set up distributed training')
-
+    
+    # bootstrapping parameters
+    parser.add_argument('--bootstrapping', action='store_true')
+    parser.set_defaults(bootstrapping=False)
+    parser.add_argument('--last_model', default=None, type=str,
+                        help='last MAE model to train next bootstrapping MAE model')
+    
     return parser
 
 
