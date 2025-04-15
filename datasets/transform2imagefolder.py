@@ -48,6 +48,7 @@ def organize_dataset(csv_files, img_dir, output_dir):
 
 if __name__ == "__main__":
     # 输入路径
+    #
     base_dir = "/home/qinyh/.cache/kagglehub/datasets/hylanj/mini-imagenetformat-csv/versions/1"
     images_dir = base_dir + "/images/images"  # 图像目录
     output_dir = "./datasets/mini_imagenet"  # 输出目标目录
