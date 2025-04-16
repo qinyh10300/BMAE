@@ -19,7 +19,7 @@ CURRENT_DATETIME=$(date +"%Y-%m-%d_%H-%M-%S")
 # 动态生成日志目录
 LOG_DIR="./logs/B_mae_1/tb_${CURRENT_DATETIME}"
 
-python main_pretrain_bootstrapped.py \
+python main_pretrain_bootstrapped_single_step.py \
     --model ${MODEL} \
     --data_path ${DATA_PATH} \
     --output_dir ${OUTPUT_DIR} \
